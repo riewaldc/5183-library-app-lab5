@@ -67,6 +67,17 @@ const server = app.listen(process.env.PORT || 3000, () =>
   console.log(`api up on :${server.address().port}`)
 );
 
+const path = require('path');
+
+ // --- Serve Vite build output in production --
+const distDir = path.join(__dirname, '..', 'web', 'dist');
+ app.use(express.static(distDir));
+
+ // SPA fallback: send index.html for non-API routes
+ app.get(/^\/(?!api).*/, (req, res) => {
+ res.sendFile(path.join(distDir, 'index.html'));
+ });
+
 // graceful shutdown (SIGTERM)
 process.on('SIGTERM', () => {
   server.close(() => process.exit(0));
