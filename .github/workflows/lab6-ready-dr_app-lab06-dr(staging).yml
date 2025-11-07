@@ -34,6 +34,15 @@ jobs:
         with:
           name: node-app
           path: .
+          
+      - name: Build React app (Vite)
+        run: |
+          npm --prefix web ci
+          npm --prefix web run build
+      # (Optional) verify dist created
+      - name: List Vite build output
+        run: ls -la web/dist
+ 
 
   deploy:
     runs-on: ubuntu-latest
@@ -52,4 +61,5 @@ jobs:
           app-name: 'app-lab06-dr'
           slot-name: 'staging'
           package: .
+
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7A2CEE12363E45BE9CD49F4F807F93AD }}
